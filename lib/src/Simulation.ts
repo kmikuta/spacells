@@ -1,18 +1,14 @@
-import { Cultures } from "./core/cell/Cultures";
+import { Cell } from "./core/cultures/Cell";
+import { Cultures } from "./core/cultures/Cultures";
 import { Terrain } from "./core/terrain/Terrain";
 
 export class Simulation {
-  private readonly terrain: Terrain;
-  private readonly cultures: Cultures;
-
-  constructor(terrain: Terrain, cultures: Cultures) {
-    this.terrain = terrain;
-    this.cultures = cultures;
-
-    this.terrain.putCultures(cultures);
-  }
+  constructor(
+    private readonly terrain: Terrain,
+    private readonly cultures: Cultures
+  ) {}
 
   public step(): void {
-    this.cultures.getAll().forEach((c) => c.step());
+    this.cultures.step();
   }
 }

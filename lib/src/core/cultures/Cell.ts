@@ -3,10 +3,7 @@ import { TerrainProxy } from "../terrain/TerrainProxy";
 const consumptionNeed = 1;
 
 export class Cell {
-  constructor(
-    public readonly id: string,
-    private readonly terrain: TerrainProxy
-  ) {
+  constructor(public readonly id: string, private readonly terrain: TerrainProxy) {
     this.terrain.occupy();
   }
 

@@ -12,7 +12,10 @@ export type SpotAddress = Index2d;
 export class Spot2dArray {
   private readonly area: Spot[][] = [];
 
-  constructor(public readonly rows: number, public readonly cols: number) {
+  constructor(
+    public readonly rows: number,
+    public readonly cols: number,
+  ) {
     this.area = create2DArray(rows, cols, Spot.empty());
   }
 

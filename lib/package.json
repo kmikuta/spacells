@@ -4,11 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "clean": "rm -rf dist && rm -rf reports",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "test": "npm run test:unit",
+    "test:unit": "vitest run --dir ./src",
+    "test:unit:watch": "vitest watch --dir ./src",
+    "test:performance": "vitest bench --dir ./performance --run --reporter=json --outputFile ./reports/performance.json",
+    "test:simulation": "vitest run run-and-report.spec.ts",
+    "test:format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vitest": "^1.5.0"
   }
 }

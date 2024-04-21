@@ -1,5 +1,8 @@
 export class Spot {
-  constructor(public readonly occupantId: string | null, public readonly resourceCount: number) {}
+  constructor(
+    public readonly occupantId: string | null,
+    public readonly resourceCount: number,
+  ) {}
 
   public static empty(): Spot {
     return new Spot(null, 10);

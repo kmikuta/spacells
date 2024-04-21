@@ -4,7 +4,10 @@ import { TerrainFacade } from "../terrain/TerrainFacade";
 const consumptionNeed = 1;
 
 export class Cell {
-  constructor(public readonly id: string, private readonly terrain: TerrainFacade) {}
+  constructor(
+    public readonly id: string,
+    private readonly terrain: TerrainFacade,
+  ) {}
 
   public step() {
     this.consume();

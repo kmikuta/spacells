@@ -8,11 +8,14 @@ export class Cell {
 
   public step() {
     this.consume();
-    this.move();
   }
 
   private consume() {
-    this.terrain.consume(consumptionNeed);
+    const consumed = this.terrain.consume(consumptionNeed);
+
+    if (consumed === 0) {
+      this.move();
+    }
   }
 
   private move() {

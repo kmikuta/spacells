@@ -8,7 +8,14 @@ const cells = new Cultures(terrain, 10);
 const simulation = new Simulation(terrain, cells);
 const vizualizer = new Visualizer(terrain, cells);
 
-for (let i = 0; i < 10; i++) {
+// setInterval(() => {
+//   console.clear();
+//   simulation.step();
+//   vizualizer.execute();
+// }, 1000);
+
+for (let i = 0; i < 11; i++) {
   simulation.step();
 }
+
 vizualizer.execute();

@@ -13,8 +13,12 @@ export class Spot {
     return new Spot(this.occupantId, this.resourceCount - consumption);
   }
 
-  public setOccupant(occupantId: string) {
+  public setOccupant(occupantId: string | null) {
     return new Spot(occupantId, this.resourceCount);
+  }
+
+  public copy(): Spot {
+    return new Spot(this.occupantId, this.resourceCount);
   }
 
   public toString(): string {

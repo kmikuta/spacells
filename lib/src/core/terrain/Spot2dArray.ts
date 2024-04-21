@@ -1,7 +1,13 @@
-import { create2DArray, findIndexIn2DArray } from "./util/arrays";
+import {
+  Index2d,
+  create2DArray,
+  findIndexIn2DArray,
+  findIndexesIn2DArray,
+  getSurroundingIn2DArray,
+} from "../../util/array/array2d";
 import { Spot } from "./Spot";
 
-export type SpotAddress = [number, number];
+export type SpotAddress = Index2d;
 
 export class Spot2dArray {
   private readonly area: Spot[][] = [];
@@ -10,20 +16,25 @@ export class Spot2dArray {
     this.area = create2DArray(rows, cols, Spot.empty());
   }
 
-  public get([i, j]: SpotAddress): Spot {
-    return this.area[i][j];
+  // TODO secure for the address out of the grid
+  public get({ i, j }: SpotAddress): Spot {
+    return this.area[i][j].copy();
   }
 
-  public set([i, j]: SpotAddress, value: Spot) {
-    this.area[i][j] = value;
+  public set({ i, j }: SpotAddress, value: Spot) {
+    this.area[i][j] = value.copy();
   }
 
-  public getAddress(predicate: (spot: Spot) => boolean): SpotAddress {
-    const index = findIndexIn2DArray(this.area, predicate);
-    if (index === null) {
-      throw new Error("Cannot find address by predicate.");
-    }
-    return index;
+  public findAddress(predicate: (spot: Spot) => boolean): SpotAddress | null {
+    return findIndexIn2DArray(this.area, predicate);
+  }
+
+  public findAddresses(predicate: (spot: Spot) => boolean): SpotAddress[] {
+    return findIndexesIn2DArray(this.area, predicate);
+  }
+
+  public getSurrounding(address: SpotAddress): SpotAddress[] {
+    return getSurroundingIn2DArray(address, this.rows, this.cols);
   }
 
   public toStringArray(): string[][] {

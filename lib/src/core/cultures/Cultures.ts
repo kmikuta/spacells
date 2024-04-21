@@ -1,5 +1,5 @@
 import { Terrain } from "../terrain/Terrain";
-import { TerrainProxy } from "../terrain/TerrainProxy";
+import { TerrainFacade } from "../terrain/TerrainFacade";
 import { Cell } from "./Cell";
 
 export class Cultures {
@@ -7,8 +7,11 @@ export class Cultures {
 
   constructor(terrain: Terrain, initialCellCount: number) {
     for (let i = 0; i < initialCellCount; i++) {
-      const id = `c${i}`;
-      this.cells.push(new Cell(id, new TerrainProxy(terrain, id)));
+      const cellId = `c${i}`;
+      const cell = new Cell(cellId, new TerrainFacade(terrain, cellId));
+
+      this.cells.push(cell);
+      terrain.takeInitialSpot(cellId);
     }
   }
 

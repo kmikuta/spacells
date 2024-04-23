@@ -4,7 +4,7 @@ import {
   findIndexIn2DArray,
   findIndexesIn2DArray,
   getSurroundingIn2DArray,
-} from "../../util/array/array2d";
+} from "../util/array/array2d";
 import { Spot } from "./Spot";
 
 export type SpotAddress = Index2d;
@@ -15,8 +15,13 @@ export class Spot2dArray {
   constructor(
     public readonly rows: number,
     public readonly cols: number,
+    private readonly resourcesPerSpot: number,
   ) {
-    this.area = create2DArray(rows, cols, Spot.empty());
+    this.area = create2DArray(rows, cols, Spot.empty(resourcesPerSpot));
+  }
+
+  get items(): Spot[][] {
+    return this.area.map((cols) => cols.map((item) => item.copy()));
   }
 
   // TODO secure for the address out of the grid
@@ -38,9 +43,5 @@ export class Spot2dArray {
 
   public getSurrounding(address: SpotAddress): SpotAddress[] {
     return getSurroundingIn2DArray(address, this.rows, this.cols);
-  }
-
-  public toStringArray(): string[][] {
-    return this.area.map((arr) => arr.map((item) => item.toString()));
   }
 }

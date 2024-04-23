@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist && rm -rf reports",
     "build": "tsc && vite build",
-    "test": "npm run test:unit",
+    "test": "npm run test:unit && npm run test:performance && npm run test:simulation && npm run test:format",
     "test:unit": "vitest run --dir ./src",
     "test:unit:watch": "vitest watch --dir ./src",
     "test:performance": "vitest bench --dir ./performance --run --reporter=json --outputFile ./reports/performance.json",

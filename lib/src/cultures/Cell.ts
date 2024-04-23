@@ -1,4 +1,4 @@
-import { randomArrayElement } from "../../util/array/elements";
+import { randomArrayElement } from "../util/array/elements";
 import { TerrainFacade } from "../terrain/TerrainFacade";
 
 const consumptionNeed = 1;

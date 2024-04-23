@@ -4,8 +4,8 @@ export class Spot {
     public readonly resourceCount: number,
   ) {}
 
-  public static empty(): Spot {
-    return new Spot(null, 10);
+  public static empty(initialResources: number): Spot {
+    return new Spot(null, initialResources);
   }
 
   get isOccupied() {

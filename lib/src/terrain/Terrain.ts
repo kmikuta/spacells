@@ -1,19 +1,27 @@
-import { randomArrayElement } from "../../util/array/elements";
+import { randomArrayElement } from "../util/array/elements";
 import { Spot2dArray, SpotAddress } from "./Spot2dArray";
 
 export class Terrain {
   private readonly area: Spot2dArray;
 
-  constructor(width: number, height: number) {
-    this.area = new Spot2dArray(height, width);
+  constructor(width: number, height: number, resourcesPerSpot: number) {
+    this.area = new Spot2dArray(height, width, resourcesPerSpot);
   }
 
   get dimensions(): string {
     return `${this.area.cols}x${this.area.rows}`;
   }
 
+  get cellMatrix(): string[][] {
+    return this.area.items.map((cols) => cols.map((spot) => spot.occupantId ?? ""));
+  }
+
+  get resourceMatrix(): number[][] {
+    return this.area.items.map((cols) => cols.map((spot) => spot.resourceCount));
+  }
+
   get visualMatrix(): string[][] {
-    return this.area.toStringArray();
+    return this.area.items.map((cols) => cols.map((spot) => spot.toString()));
   }
 
   public takeSpot(occupantId: string, address: SpotAddress) {

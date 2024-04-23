@@ -20,6 +20,8 @@ export class Cultures {
   }
 
   public step() {
-    this.cells.forEach((s) => s.step());
+    this.cells.forEach((cell) => {
+      cell.step();
+    });
   }
 }

@@ -34,8 +34,9 @@ export function getSurroundingIn2DArray(point: Index2d, rows: number, cols: numb
   const { i, j } = point;
   const iValues = [i - 1, i, i + 1].filter((i) => i >= 0 && i < rows);
   const jValues = [j - 1, j, j + 1].filter((j) => j >= 0 && j < cols);
+
   return iValues
     .map((ival) => jValues.map((jval) => ({ i: ival, j: jval })))
     .flat()
-    .filter(({ i, j }) => i !== point.i && j !== point.j);
+    .filter(({ i, j }) => !(i === point.i && j === point.j));
 }

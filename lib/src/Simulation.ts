@@ -1,5 +1,5 @@
-import { Cultures } from "./core/cultures/Cultures";
-import { Terrain } from "./core/terrain/Terrain";
+import { Cultures } from "./cultures/Cultures";
+import { Terrain } from "./terrain/Terrain";
 
 export class Simulation {
   constructor(

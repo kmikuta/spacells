@@ -6,12 +6,12 @@
   "scripts": {
     "clean": "rm -rf dist && rm -rf reports",
     "build": "tsc && vite build",
-    "test": "npm run test:unit && npm run test:performance && npm run test:simulation && npm run test:format",
     "test:unit": "vitest run --dir ./src",
     "test:unit:watch": "vitest watch --dir ./src",
     "test:performance": "vitest bench --dir ./performance --run --reporter=json --outputFile ./reports/performance.json",
     "test:simulation": "vitest run run-and-report.spec.ts",
     "test:format": "prettier --check .",
+    "test:filesizes": "node ./bin/file-size-check",
     "format:fix": "prettier --write ."
   },
   "devDependencies": {
@@ -19,5 +19,8 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vitest": "^1.5.0"
+  },
+  "distFileSizes": {
+    "maxSizeKB": 10
   }
 }

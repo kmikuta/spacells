@@ -1,8 +1,17 @@
 {
   "name": "@spacells/core",
   "description": "Spacells - micro life for your virtual world",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "main": "dist/spacells.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmikuta/spacells"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf dist && rm -rf reports",
     "build": "tsc && vite build",

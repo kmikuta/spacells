@@ -1,7 +1,7 @@
 {
   "name": "@spacells/core",
   "description": "Spacells - micro life for your virtual world",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist && rm -rf reports",

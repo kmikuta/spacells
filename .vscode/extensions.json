@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-vscode.makefile-tools",
+    "esbenp.prettier-vscode",
+    "github.copilot",
+    "kingwl.vscode-vitest-runner"
+  ]
+}

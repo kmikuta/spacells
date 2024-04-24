@@ -22,3 +22,23 @@ Next-gen organisms are coming! If the simulations prove to be useful, the librar
 - Bacteria fights the other bacteria
 - Bacteria cooperates with others
 - Mutagens in the environment can change bacteria features
+
+## Setup
+
+- `make install` - install dependencies
+- `make build` - build the project
+- `make test` - run tests
+
+## Usage
+
+```javascript
+import { Cultures, Simulation, Terrain } from "spacells";
+
+const terrain = new Terrain(10, 10, 1000);
+const cells = new Cultures(terrain, 10);
+const simulation = new Simulation(terrain, cells);
+
+for (let i = 0; i < 11; i++) {
+  simulation.step();
+}
+```

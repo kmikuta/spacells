@@ -1,6 +1,6 @@
 {
-  "name": "space-bacteria",
-  "description": "",
+  "name": "spacells",
+  "description": "Spacells - space bacteria simulation project",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

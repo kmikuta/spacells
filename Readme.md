@@ -9,10 +9,10 @@ Next-gen organisms are coming! If the simulations prove to be useful, the librar
 - Bacteria has position and can be observed
 - Bacteria consumes resources
 - Bacteria migrates to look for resources
+- Bacteria grows
 
 ## Planned features
 
-- Bacteria grows
 - Bacteria reproduces
 - Bacteria has reporoductive strategy
 - Bacteria communicates via signals

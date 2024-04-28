@@ -19,4 +19,5 @@ publish:
 	npm publish --access public
 
 clean:
+	cd wasm && cargo clean && rm -rf pkg
 	npm run clean

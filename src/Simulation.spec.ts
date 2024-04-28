@@ -139,4 +139,20 @@ describe("E2E simulation test", () => {
       expect(terrain.resourceMatrix.flat()[0]).toEqual(1);
     });
   });
+
+  describe("when cell has enough energy to divide", () => {
+    beforeEach(() => {
+      terrain = new Terrain(1, 2, 10);
+      cells = new Cultures(terrain, 1, 1);
+      simulation = new Simulation(terrain, cells);
+
+      for (let i = 0; i < 18; i++) {
+        simulation.step();
+      }
+    });
+
+    it("should divide", () => {
+      expect(terrain.cellMatrix.flat()).toContain("_c0");
+    });
+  });
 });

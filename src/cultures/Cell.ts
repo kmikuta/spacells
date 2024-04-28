@@ -3,10 +3,13 @@ import { TerrainFacade } from "../terrain/TerrainFacade";
 import { EnergyStore, NotEnoughEnergyError } from "../energy/EnergyStore";
 
 const INITIAL_SIZE = 1;
+const INITIAL_ENERGY = 5;
 const RESOURCE_INTAKE = 1;
 const INNER_PROCESS_ENERGY_RATE = 0.2;
 const GROW_PROCESS_ENERGY_RATE = 0.5;
 const MIGRATION_PROCESS_ENERGY_RATE = 0.2;
+const DIVISION_PROCESS_ENERGY_RATE = 5;
+const MINIMAL_SIZE_TO_DIVIDE = 8;
 
 export class Cell {
   private readonly energyStore: EnergyStore;
@@ -34,6 +37,7 @@ export class Cell {
     this.executeInnerProcesses();
     this.produceEnergy();
     this.grow();
+    this.divide();
   }
 
   public copy() {
@@ -79,6 +83,20 @@ export class Cell {
         // consider changing the reproduction strategy
       }
     }
+  }
+
+  private divide() {
+    if (this.size < MINIMAL_SIZE_TO_DIVIDE || this.energyStore.currentValue < DIVISION_PROCESS_ENERGY_RATE) {
+      return;
+    }
+
+    const clone = new Cell(`_${this.id}`, this.terrain, INITIAL_ENERGY);
+
+    this.energyStore.utilize(DIVISION_PROCESS_ENERGY_RATE);
+
+    try {
+      this.terrain.put(clone);
+    } catch {}
   }
 
   private move() {

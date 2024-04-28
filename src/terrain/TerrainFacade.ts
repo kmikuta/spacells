@@ -1,3 +1,4 @@
+import { Cell } from "../cultures/Cell";
 import { SpotAddress } from "./Spot2dArray";
 import { Terrain } from "./Terrain";
 
@@ -17,5 +18,9 @@ export class TerrainFacade {
 
   public getPossibleNextMoves(): SpotAddress[] {
     return this.terrain.getFreeSpotAddressesAround(this.occupantId);
+  }
+
+  public put(cell: Cell) {
+    this.terrain.takeInitialSpot(cell.id);
   }
 }

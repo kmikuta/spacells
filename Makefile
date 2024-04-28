@@ -1,7 +1,9 @@
 install:
+	cd wasm && cargo build --verbose
 	npm ci
 
 build:
+	cd wasm && wasm-pack build --target bundler
 	npm run build
 
 test:
@@ -17,4 +19,5 @@ publish:
 	npm publish --access public
 
 clean:
+	cd wasm && cargo clean && rm -rf pkg
 	npm run clean

@@ -1,7 +1,9 @@
 install:
+	cd wasm && cargo build --verbose
 	npm ci
 
 build:
+	cd wasm && wasm-pack build --target bundler
 	npm run build
 
 test:

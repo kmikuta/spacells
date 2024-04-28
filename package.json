@@ -23,10 +23,14 @@
     "test:filesizes": "node ./bin/file-size-check",
     "format:fix": "prettier --write ."
   },
+  "dependencies": {
+    "spacells-wasm": "file:wasm/pkg"
+  },
   "devDependencies": {
     "prettier": "^3.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-wasm": "^3.3.0",
     "vitest": "^1.5.0"
   },
   "distFileSizes": {

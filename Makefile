@@ -11,5 +11,10 @@ test:
 	npm run test:filesizes
 	npm run test:format
 
+publish:
+	npm ci
+	npm run build
+	npm publish --access public
+
 clean:
 	npm run clean

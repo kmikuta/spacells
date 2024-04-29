@@ -33,6 +33,10 @@ export class Cell {
     return this.size;
   }
 
+  private get canDivide(): boolean {
+    return this.size >= MINIMAL_SIZE_TO_DIVIDE && this.energyStore.currentValue >= DIVISION_PROCESS_ENERGY_RATE;
+  }
+
   public step() {
     this.executeInnerProcesses();
     this.produceEnergy();
@@ -86,17 +90,19 @@ export class Cell {
   }
 
   private divide() {
-    if (this.size < MINIMAL_SIZE_TO_DIVIDE || this.energyStore.currentValue < DIVISION_PROCESS_ENERGY_RATE) {
+    if (!this.canDivide) {
       return;
     }
 
     const clone = new Cell(`_${this.id}`, this.terrain, INITIAL_ENERGY);
-
     this.energyStore.utilize(DIVISION_PROCESS_ENERGY_RATE);
+    const freeSpot = this.terrain.getPossibleNextMoves();
 
-    try {
-      this.terrain.put(clone);
-    } catch {}
+    if (freeSpot.length === 0) {
+      return;
+    }
+
+    this.terrain.put(clone, randomArrayElement(freeSpot));
   }
 
   private move() {

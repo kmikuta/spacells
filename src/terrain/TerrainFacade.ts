@@ -20,7 +20,7 @@ export class TerrainFacade {
     return this.terrain.getFreeSpotsAround(this.occupantId);
   }
 
-  public put(cell: Cell) {
-    this.terrain.takeSpotRandomly(cell.id);
+  public put(cell: Cell, spot: Spot) {
+    this.terrain.takeSpot(cell.id, spot);
   }
 }

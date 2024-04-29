@@ -36,9 +36,13 @@ export class Terrain {
   }
 
   public takeSpot(occupantId: string, destSpot: Spot) {
-    const currentSpot = this.spots.getByOccupantId(occupantId);
-    this.spots.save(currentSpot.setOccupant(null));
-    this.spots.save(destSpot.setOccupant(occupantId));
+    try {
+      const currentSpot = this.spots.getByOccupantId(occupantId);
+      this.spots.save(currentSpot.setOccupant(null));
+    } catch {
+    } finally {
+      this.spots.save(destSpot.setOccupant(occupantId));
+    }
   }
 
   public takeSpotRandomly(occupantId: string) {

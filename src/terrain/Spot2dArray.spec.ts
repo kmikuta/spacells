@@ -42,6 +42,14 @@ describe("Spot2dArray", () => {
         resourceCount: 1,
       });
     });
+
+    it("should find a spot by occupant id", () => {
+      expect(spot2dArray.findByOccupantId("c0")).toEqual({
+        address: { i: 0, j: 0 },
+        occupantId: "c0",
+        resourceCount: 1,
+      });
+    });
   });
 
   describe("when occupant does not exist", () => {
@@ -51,6 +59,10 @@ describe("Spot2dArray", () => {
 
     it("should throw an error", () => {
       expect(() => spot2dArray.getByOccupantId("c0")).toThrowError("Cannot find occupant with id: c0");
+    });
+
+    it("should return null", () => {
+      expect(spot2dArray.findByOccupantId("c0")).toBeNull();
     });
   });
 

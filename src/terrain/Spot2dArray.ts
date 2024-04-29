@@ -28,12 +28,16 @@ export class Spot2dArray {
   }
 
   public getByOccupantId(occupantId: string): Spot {
-    const address = this.occupantIdAddressMapping.get(occupantId);
-    if (address === undefined) {
+    const occupant = this.findByOccupantId(occupantId);
+    if (occupant === null) {
       throw new OccupantNotFoundError(occupantId);
     }
-    const { i, j } = address;
-    return this.area[i][j].copy();
+    return occupant;
+  }
+
+  public findByOccupantId(occupantId: string): Spot | null {
+    const address = this.occupantIdAddressMapping.get(occupantId);
+    return address ? this.area[address.i][address.j].copy() : null;
   }
 
   public filter(predicate: (spot: Spot) => boolean): Spot[] {

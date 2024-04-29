@@ -4,12 +4,12 @@ import { Simulation } from "./Simulation";
 import { Cell } from "./cultures/Cell";
 import { CellFactory } from "./cultures/CellFactory";
 import { TerrainFactory } from "./terrain/TerrainFactory";
-import { SpotAddress } from "./terrain/Spot2dArray";
 import { generateIds } from "./util/id/generator";
+import { Spot } from "./terrain/Spot";
 
 describe("E2E simulation test", () => {
   let terrain: Terrain, cells: Cell[], simulation: Simulation;
-  let initialIndex: SpotAddress;
+  let initialSpot: Spot;
 
   describe("when terrain and cultures are being created", () => {
     beforeEach(() => {
@@ -47,13 +47,13 @@ describe("E2E simulation test", () => {
       simulation = new Simulation(terrain, cells);
 
       simulation.step();
-      initialIndex = terrain.getOccupantAddress("c0");
+      initialSpot = terrain.getSpot("c0");
       simulation.step();
     });
 
     it("should migrate", () => {
-      const currentIndex = terrain.getOccupantAddress("c0");
-      expect(currentIndex).not.toEqual(initialIndex);
+      const currentSpot = terrain.getSpot("c0");
+      expect(currentSpot.address).not.toEqual(initialSpot.address);
     });
   });
 
@@ -63,13 +63,13 @@ describe("E2E simulation test", () => {
       cells = generateIds(4).map((id) => CellFactory.createCell(terrain, { id }));
       simulation = new Simulation(terrain, cells);
 
-      initialIndex = terrain.getOccupantAddress("c0");
+      initialSpot = terrain.getSpot("c0");
       simulation.step();
     });
 
     it("should stay in the same place", () => {
-      const currentIndex = terrain.getOccupantAddress("c0");
-      expect(currentIndex).toEqual(initialIndex);
+      const currentSpot = terrain.getSpot("c0");
+      expect(currentSpot.address).toEqual(initialSpot.address);
     });
   });
 
@@ -112,15 +112,15 @@ describe("E2E simulation test", () => {
       cells = [CellFactory.createCell(terrain, { id: "c0", initialEnergy: 0.2 })]; // cell will consume 0.2 for inner processes, so no energy for migration
       simulation = new Simulation(terrain, cells);
 
-      initialIndex = terrain.getOccupantAddress("c0");
+      initialSpot = terrain.getSpot("c0");
 
       simulation.step();
     });
 
     it("should not be able to move", () => {
-      const currentIndex = terrain.getOccupantAddress("c0");
+      const currentSpot = terrain.getSpot("c0");
       expect(cells[0].energy).toEqual(0);
-      expect(currentIndex).toEqual(initialIndex);
+      expect(currentSpot.address).toEqual(initialSpot.address);
     });
   });
 
@@ -136,7 +136,7 @@ describe("E2E simulation test", () => {
 
     it("should not consume resources", () => {
       expect(cells[0].energy).toEqual(47.9);
-      expect(terrain.getSpot({ i: 0, j: 0 }).resourceCount).toEqual(1);
+      expect(terrain.getSpot("c0").resourceCount).toEqual(1);
     });
   });
 

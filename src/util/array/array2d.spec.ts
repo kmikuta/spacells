@@ -3,7 +3,7 @@ import { create2DArray, findIndexIn2DArray, findIndexesIn2DArray, getSurrounding
 
 describe("array2d utils", () => {
   it("should create and fill a 2d array", () => {
-    expect(create2DArray(3, 4, "o")).toEqual([
+    expect(create2DArray(3, 4, () => "o")).toEqual([
       ["o", "o", "o", "o"],
       ["o", "o", "o", "o"],
       ["o", "o", "o", "o"],

@@ -1,78 +1,64 @@
 import { randomArrayElement } from "../util/array/elements";
-import { Spot } from "./Spot";
-import { Spot2dArray, SpotAddress } from "./Spot2dArray";
+import { Spot, SpotAddress } from "./Spot";
+import { Spot2dArray } from "./Spot2dArray";
+
+export class TerrainFullError extends Error {
+  constructor() {
+    super("No free spots left.");
+  }
+}
 
 export class Terrain {
-  private readonly area: Spot2dArray;
+  private readonly spots: Spot2dArray;
 
   constructor(width: number, height: number, resourcesPerSpot: number) {
-    this.area = new Spot2dArray(height, width, () => Spot.empty(resourcesPerSpot));
+    this.spots = new Spot2dArray(height, width, (address: SpotAddress) => Spot.empty(address, resourcesPerSpot));
   }
 
   get dimensions(): string {
-    return `${this.area.cols}x${this.area.rows}`;
+    return `${this.spots.cols}x${this.spots.rows}`;
   }
 
   get cellMatrix(): string[][] {
-    return this.area.items.map((cols) => cols.map((spot) => spot.occupantId ?? ""));
+    return this.spots.items.map((cols) => cols.map((spot) => spot.occupantId ?? ""));
   }
 
   get resourceMatrix(): number[][] {
-    return this.area.items.map((cols) => cols.map((spot) => spot.resourceCount));
+    return this.spots.items.map((cols) => cols.map((spot) => spot.resourceCount));
   }
 
   get visualMatrix(): string[][] {
-    return this.area.items.map((cols) => cols.map((spot) => spot.toString()));
+    return this.spots.items.map((cols) => cols.map((spot) => spot.toString()));
   }
 
-  public takeSpot(occupantId: string, address: SpotAddress) {
-    const currentAddress = this.getOccupantAddress(occupantId);
-    const currentSpot = this.area.get(currentAddress);
-    const newSpot = this.area.get(address);
-    this.area.set(currentAddress, currentSpot.setOccupant(null));
-    this.area.set(address, newSpot.setOccupant(occupantId));
+  public getSpot(occupantId: string): Spot {
+    return this.spots.getByOccupantId(occupantId);
   }
 
-  public takeInitialSpot(occupantId: string) {
-    const currentAddress = this.area.findAddress((spot) => spot.occupantId === occupantId);
-    if (currentAddress !== null) {
-      throw new Error("The occupant already has a spot.");
-    }
+  public takeSpot(occupantId: string, destSpot: Spot) {
+    const currentSpot = this.spots.getByOccupantId(occupantId);
+    this.spots.save(currentSpot.setOccupant(null));
+    this.spots.save(destSpot.setOccupant(occupantId));
+  }
 
-    const freeSpotAddresses = this.area.findAddresses((spot) => !spot.isOccupied);
-    if (freeSpotAddresses.length === 0) {
-      throw new Error("Cannot find free spot anymore.");
+  public takeSpotRandomly(occupantId: string) {
+    const freeSpots = this.spots.filter((spot) => !spot.isOccupied);
+    if (freeSpots.length === 0) {
+      throw new TerrainFullError();
     }
-
-    const address = randomArrayElement(freeSpotAddresses);
-    const spot = this.area.get(address);
-    this.area.set(address, spot.setOccupant(occupantId));
+    const spot = randomArrayElement(freeSpots);
+    this.spots.save(spot.setOccupant(occupantId));
   }
 
   public consumeResources(occupantId: string, amount: number): number {
-    const address = this.getOccupantAddress(occupantId);
-    const spot = this.area.get(address);
+    const spot = this.spots.getByOccupantId(occupantId);
     const consumption = Math.min(spot.resourceCount, amount);
     const updated = spot.subResources(consumption);
-    this.area.set(address, updated);
+    this.spots.save(updated);
     return consumption;
   }
 
-  public getFreeSpotAddressesAround(occupantId: string): SpotAddress[] {
-    const address = this.getOccupantAddress(occupantId);
-    const surrounding = this.area.getSurrounding(address);
-    return surrounding.filter((address) => !this.area.get(address).isOccupied);
-  }
-
-  public getSpot(address: SpotAddress): Spot {
-    return this.area.get(address);
-  }
-
-  public getOccupantAddress(occupantId: string): SpotAddress {
-    const address = this.area.findAddress((spot) => spot.occupantId === occupantId);
-    if (address === null) {
-      throw new Error(`Occupant ${occupantId} has no address.`);
-    }
-    return address;
+  public getFreeSpotsAround(occupantId: string): Spot[] {
+    return this.spots.getSurroundingOfOccupant(occupantId).filter((spot) => !spot.isOccupied);
   }
 }

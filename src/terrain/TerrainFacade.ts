@@ -1,5 +1,5 @@
 import { Cell } from "../cultures/Cell";
-import { SpotAddress } from "./Spot2dArray";
+import { Spot } from "./Spot";
 import { Terrain } from "./Terrain";
 
 export class TerrainFacade {
@@ -12,15 +12,15 @@ export class TerrainFacade {
     return this.terrain.consumeResources(this.occupantId, amount);
   }
 
-  public moveToSpot(address: SpotAddress) {
-    this.terrain.takeSpot(this.occupantId, address);
+  public moveToSpot(spot: Spot) {
+    this.terrain.takeSpot(this.occupantId, spot);
   }
 
-  public getPossibleNextMoves(): SpotAddress[] {
-    return this.terrain.getFreeSpotAddressesAround(this.occupantId);
+  public getPossibleNextMoves(): Spot[] {
+    return this.terrain.getFreeSpotsAround(this.occupantId);
   }
 
   public put(cell: Cell) {
-    this.terrain.takeInitialSpot(cell.id);
+    this.terrain.takeSpotRandomly(cell.id);
   }
 }

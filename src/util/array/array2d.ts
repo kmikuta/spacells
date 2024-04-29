@@ -3,8 +3,15 @@ export type Index2d = {
   j: number;
 };
 
-export function create2DArray<T>(rows: number, cols: number, initialValue: T): T[][] {
-  return new Array(rows).fill([]).map(() => new Array(cols).fill(initialValue));
+export function create2DArray<T>(rows: number, cols: number, initialValueFactory: (index: Index2d) => T): T[][] {
+  const arr = new Array(rows);
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = new Array(cols);
+    for (let j = 0; j < arr[i].length; j++) {
+      arr[i][j] = initialValueFactory({ i, j });
+    }
+  }
+  return arr;
 }
 
 export function findIndexIn2DArray<T>(arr: T[][], predicate: (item: T) => boolean): Index2d | null {

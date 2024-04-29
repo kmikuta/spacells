@@ -1,11 +1,18 @@
+export type SpotAddress = { i: number; j: number };
+
 export class Spot {
-  constructor(
+  private constructor(
+    public readonly address: SpotAddress,
     public readonly occupantId: string | null,
     public readonly resourceCount: number,
   ) {}
 
-  public static empty(initialResources: number): Spot {
-    return new Spot(null, initialResources);
+  public static empty(address: SpotAddress, initialResources: number): Spot {
+    return new Spot(address, null, initialResources);
+  }
+
+  public static create(address: SpotAddress, occupantId: string, initialResources: number): Spot {
+    return new Spot(address, occupantId, initialResources);
   }
 
   get isOccupied() {
@@ -13,15 +20,15 @@ export class Spot {
   }
 
   public subResources(consumption: number) {
-    return new Spot(this.occupantId, this.resourceCount - consumption);
+    return new Spot(this.address, this.occupantId, this.resourceCount - consumption);
   }
 
   public setOccupant(occupantId: string | null) {
-    return new Spot(occupantId, this.resourceCount);
+    return new Spot(this.address, occupantId, this.resourceCount);
   }
 
   public copy(): Spot {
-    return new Spot(this.occupantId, this.resourceCount);
+    return new Spot(this.address, this.occupantId, this.resourceCount);
   }
 
   public toString(): string {

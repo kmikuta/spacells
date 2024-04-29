@@ -7,7 +7,7 @@ export class Simulation {
     private readonly cells: Cell[],
   ) {
     this.cells.forEach((cell) => {
-      this.terrain.takeInitialSpot(cell.id);
+      this.terrain.takeSpotRandomly(cell.id);
     });
   }
 

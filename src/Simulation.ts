@@ -1,13 +1,17 @@
-import { Cultures } from "./cultures/Cultures";
+import { Cell } from "./cultures/Cell";
 import { Terrain } from "./terrain/Terrain";
 
 export class Simulation {
   constructor(
     private readonly terrain: Terrain,
-    private readonly cultures: Cultures,
-  ) {}
+    private readonly cells: Cell[],
+  ) {
+    this.cells.forEach((cell) => {
+      this.terrain.takeInitialSpot(cell.id);
+    });
+  }
 
   public step(): void {
-    this.cultures.step();
+    this.cells.forEach((cell) => cell.step());
   }
 }

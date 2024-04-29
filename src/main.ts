@@ -1,6 +1,10 @@
-import { Simulation } from "./Simulation";
-import { Cultures } from "./cultures/Cultures";
-import { Terrain } from "./terrain/Terrain";
-import { Visualizer } from "./visualizer/Visualizer";
+export { Cell } from "./cultures/Cell";
+export { CellFactory, type CellConfig } from "./cultures/CellFactory";
 
-export { Cultures, Terrain, Simulation, Visualizer };
+export { Terrain } from "./terrain/Terrain";
+export { TerrainFactory, type TerrainConfig } from "./terrain/TerrainFactory";
+
+export { Visualizer } from "./visualizer/Visualizer";
+export { Simulation } from "./Simulation";
+
+export { generateIds } from "./util/id/generator";

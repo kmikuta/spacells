@@ -1,11 +1,12 @@
 import { randomArrayElement } from "../util/array/elements";
+import { Spot } from "./Spot";
 import { Spot2dArray, SpotAddress } from "./Spot2dArray";
 
 export class Terrain {
   private readonly area: Spot2dArray;
 
   constructor(width: number, height: number, resourcesPerSpot: number) {
-    this.area = new Spot2dArray(height, width, resourcesPerSpot);
+    this.area = new Spot2dArray(height, width, () => Spot.empty(resourcesPerSpot));
   }
 
   get dimensions(): string {
@@ -63,7 +64,11 @@ export class Terrain {
     return surrounding.filter((address) => !this.area.get(address).isOccupied);
   }
 
-  private getOccupantAddress(occupantId: string): SpotAddress {
+  public getSpot(address: SpotAddress): Spot {
+    return this.area.get(address);
+  }
+
+  public getOccupantAddress(occupantId: string): SpotAddress {
     const address = this.area.findAddress((spot) => spot.occupantId === occupantId);
     if (address === null) {
       throw new Error(`Occupant ${occupantId} has no address.`);

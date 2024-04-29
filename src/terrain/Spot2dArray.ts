@@ -15,9 +15,9 @@ export class Spot2dArray {
   constructor(
     public readonly rows: number,
     public readonly cols: number,
-    private readonly resourcesPerSpot: number,
+    initialValueFactory: () => Spot,
   ) {
-    this.area = create2DArray(rows, cols, Spot.empty(resourcesPerSpot));
+    this.area = create2DArray(rows, cols, initialValueFactory());
   }
 
   get items(): Spot[][] {

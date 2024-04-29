@@ -18,7 +18,7 @@ export class Cell {
   constructor(
     public readonly id: string,
     private readonly terrain: TerrainFacade,
-    initialEnergy: number,
+    initialEnergy: number = INITIAL_ENERGY,
     initialSize: number = INITIAL_SIZE,
   ) {
     this.energyStore = new EnergyStore(initialEnergy);

@@ -1,8 +1,8 @@
 import { bench } from "vitest";
-import { Cultures, Terrain, Simulation } from "../src/main";
+import { CellFactory, Simulation, TerrainFactory, generateIds } from "../src/main";
 
-const terrain = new Terrain(100, 100, 1000);
-const cells = new Cultures(terrain, 100);
+const terrain = TerrainFactory.createTerrain({ width: 100, height: 100, resourcesPerSpot: 1000 });
+const cells = generateIds(100).map((id) => CellFactory.createCell(terrain, { id }));
 const simulation = new Simulation(terrain, cells);
 
 bench("Simulation step on 100x100 terrain with 100 cells", () => {

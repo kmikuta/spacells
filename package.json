@@ -18,7 +18,6 @@
     "test:unit": "vitest run --dir ./src",
     "test:unit:watch": "vitest watch --dir ./src",
     "test:performance": "vitest bench --dir ./performance --run --reporter=json --outputFile ./reports/performance.json",
-    "test:simulation": "vitest run run-and-report.spec.ts",
     "test:format": "prettier --check .",
     "test:filesizes": "node ./bin/file-size-check",
     "format:fix": "prettier --write ."

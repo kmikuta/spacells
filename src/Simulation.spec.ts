@@ -155,4 +155,20 @@ describe("E2E simulation test", () => {
       expect(terrain.cellMatrix.flat()).toContain("_c0");
     });
   });
+
+  describe("when cell has not enough energy to divide", () => {
+    beforeEach(() => {
+      terrain = TerrainFactory.createTerrain({ width: 1, height: 2, resourcesPerSpot: 0 });
+      cells = [CellFactory.createCell(terrain, { id: "c0", initialEnergy: 1, initialSize: 8 })];
+      simulation = new Simulation(terrain, cells);
+
+      for (let i = 0; i < 18; i++) {
+        simulation.step();
+      }
+    });
+
+    it("should divide", () => {
+      expect(terrain.cellMatrix.flat()).not.toContain("_c0");
+    });
+  });
 });

@@ -9,60 +9,64 @@ export class TerrainFullError extends Error {
 }
 
 export class Terrain {
-  private readonly spots: Spot2dArray;
+  private readonly spotArray: Spot2dArray;
 
   constructor(width: number, height: number, resourcesPerSpot: number) {
-    this.spots = new Spot2dArray(height, width, (address: SpotAddress) => Spot.empty(address, resourcesPerSpot));
+    this.spotArray = new Spot2dArray(height, width, (address: SpotAddress) => Spot.empty(address, resourcesPerSpot));
+  }
+
+  get spots(): Spot[][] {
+    return this.spotArray.items;
   }
 
   get dimensions(): string {
-    return `${this.spots.cols}x${this.spots.rows}`;
+    return `${this.spotArray.cols}x${this.spotArray.rows}`;
   }
 
   get cellMatrix(): string[][] {
-    return this.spots.items.map((cols) => cols.map((spot) => spot.occupantId ?? ""));
+    return this.spotArray.items.map((cols) => cols.map((spot) => spot.occupantId ?? ""));
   }
 
   get resourceMatrix(): number[][] {
-    return this.spots.items.map((cols) => cols.map((spot) => spot.resourceCount));
+    return this.spotArray.items.map((cols) => cols.map((spot) => spot.resourceCount));
   }
 
   get visualMatrix(): string[][] {
-    return this.spots.items.map((cols) => cols.map((spot) => spot.toString()));
+    return this.spotArray.items.map((cols) => cols.map((spot) => spot.toString()));
   }
 
   public getSpot(occupantId: string): Spot {
-    return this.spots.getByOccupantId(occupantId);
+    return this.spotArray.getByOccupantId(occupantId);
   }
 
   public takeSpot(occupantId: string, destSpot: Spot) {
     try {
-      const currentSpot = this.spots.getByOccupantId(occupantId);
-      this.spots.save(currentSpot.setOccupant(null));
+      const currentSpot = this.spotArray.getByOccupantId(occupantId);
+      this.spotArray.save(currentSpot.setOccupant(null));
     } catch {
     } finally {
-      this.spots.save(destSpot.setOccupant(occupantId));
+      this.spotArray.save(destSpot.setOccupant(occupantId));
     }
   }
 
   public takeSpotRandomly(occupantId: string) {
-    const freeSpots = this.spots.filter((spot) => !spot.isOccupied);
+    const freeSpots = this.spotArray.filter((spot) => !spot.isOccupied);
     if (freeSpots.length === 0) {
       throw new TerrainFullError();
     }
     const spot = randomArrayElement(freeSpots);
-    this.spots.save(spot.setOccupant(occupantId));
+    this.spotArray.save(spot.setOccupant(occupantId));
   }
 
   public consumeResources(occupantId: string, amount: number): number {
-    const spot = this.spots.getByOccupantId(occupantId);
+    const spot = this.spotArray.getByOccupantId(occupantId);
     const consumption = Math.min(spot.resourceCount, amount);
     const updated = spot.subResources(consumption);
-    this.spots.save(updated);
+    this.spotArray.save(updated);
     return consumption;
   }
 
   public getFreeSpotsAround(occupantId: string): Spot[] {
-    return this.spots.getSurroundingOfOccupant(occupantId).filter((spot) => !spot.isOccupied);
+    return this.spotArray.getSurroundingOfOccupant(occupantId).filter((spot) => !spot.isOccupied);
   }
 }

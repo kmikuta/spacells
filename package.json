@@ -1,9 +1,10 @@
 {
   "name": "@spacells/core",
   "description": "Spacells - micro life for your virtual world",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "dist/spacells.js",
+  "types": "dist/spacells.d.ts",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "prettier": "^3.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.9.0",
     "vite-plugin-wasm": "^3.3.0",
     "vitest": "^1.5.0"
   },

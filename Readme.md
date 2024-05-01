@@ -14,10 +14,10 @@ The project is in the early development stage and is not ready for production us
 - Bacteria consumes resources
 - Bacteria migrates to look for resources
 - Bacteria grows
+- Bacteria reproduces
 
 ## Planned features
 
-- Bacteria reproduces
 - Bacteria has reporoductive strategy
 - Bacteria communicates via signals
 

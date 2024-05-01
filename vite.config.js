@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
 import wasm from "vite-plugin-wasm";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
@@ -10,5 +11,5 @@ export default defineConfig({
       formats: ["es"],
     },
   },
-  plugins: [wasm()],
+  plugins: [wasm(), dts({ rollupTypes: true })],
 });

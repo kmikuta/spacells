@@ -23,4 +23,8 @@ export class TerrainFacade {
   public put(cell: Cell, spot: Spot) {
     this.terrain.takeSpot(cell.id, spot);
   }
+
+  public clone(occupantId: string): TerrainFacade {
+    return new TerrainFacade(this.terrain, occupantId);
+  }
 }

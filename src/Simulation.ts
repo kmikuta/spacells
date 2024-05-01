@@ -8,6 +8,9 @@ export class Simulation {
   ) {
     this.cells.forEach((cell) => {
       this.terrain.takeSpotRandomly(cell.id);
+      cell.onDivision((newCell) => {
+        this.cells.push(newCell);
+      });
     });
   }
 

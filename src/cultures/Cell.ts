@@ -11,9 +11,12 @@ const MIGRATION_PROCESS_ENERGY_RATE = 0.2;
 const DIVISION_PROCESS_ENERGY_RATE = 5;
 const MINIMAL_SIZE_TO_DIVIDE = 8;
 
+export type DivisionCallback = (newCell: Cell) => void;
+
 export class Cell {
   private readonly energyStore: EnergyStore;
   private size: number;
+  private divisionCallback: DivisionCallback = () => {};
 
   constructor(
     public readonly id: string,
@@ -46,6 +49,10 @@ export class Cell {
 
   public copy() {
     return new Cell(this.id, this.terrain, this.energy, this.cellSize);
+  }
+
+  public onDivision(callback: DivisionCallback) {
+    this.divisionCallback = callback;
   }
 
   private executeInnerProcesses() {
@@ -94,15 +101,16 @@ export class Cell {
       return;
     }
 
-    const clone = new Cell(`_${this.id}`, this.terrain, INITIAL_ENERGY);
-    this.energyStore.utilize(DIVISION_PROCESS_ENERGY_RATE);
-    const freeSpot = this.terrain.getPossibleNextMoves();
-
-    if (freeSpot.length === 0) {
+    const freeSpots = this.terrain.getPossibleNextMoves();
+    if (freeSpots.length === 0) {
       return;
     }
 
-    this.terrain.put(clone, randomArrayElement(freeSpot));
+    const cloneId = `_${this.id}`;
+    const clone = new Cell(cloneId, this.terrain.clone(cloneId), INITIAL_ENERGY);
+    this.energyStore.utilize(DIVISION_PROCESS_ENERGY_RATE);
+    this.terrain.put(clone, randomArrayElement(freeSpots));
+    this.divisionCallback(clone);
   }
 
   private move() {

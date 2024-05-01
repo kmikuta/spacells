@@ -14,6 +14,7 @@ test:
 
 publish:
 	npm ci
+	cd wasm && wasm-pack build --target bundler
 	npm run build
 	npm publish --access public
 

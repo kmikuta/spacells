@@ -24,6 +24,7 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
+    "nanoevents": "^9.0.0",
     "spacells-wasm": "file:wasm/pkg"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
-import { randomArrayElement } from "../util/array/elements";
+import { Unsubscribe, createNanoEvents } from "nanoevents";
 import { Spot, SpotAddress } from "./Spot";
 import { Spot2dArray } from "./Spot2dArray";
+import { randomArrayElement } from "../util/array/elements";
 
 export class TerrainFullError extends Error {
   constructor() {
@@ -8,8 +9,19 @@ export class TerrainFullError extends Error {
   }
 }
 
+export interface TerrainOccupant {
+  id: string;
+}
+
+export type OccupantAddedHandler = (cell: TerrainOccupant) => void;
+
+const Events = {
+  OccupantAdded: "@terrain/occupant-added",
+};
+
 export class Terrain {
   private readonly spotArray: Spot2dArray;
+  private readonly emitter = createNanoEvents();
 
   constructor(width: number, height: number, resourcesPerSpot: number) {
     this.spotArray = new Spot2dArray(height, width, (address: SpotAddress) => Spot.empty(address, resourcesPerSpot));
@@ -35,11 +47,15 @@ export class Terrain {
     return this.spotArray.items.map((cols) => cols.map((spot) => spot.toString()));
   }
 
-  public getSpot(occupantId: string): Spot {
+  public onOccupantAdded(handler: OccupantAddedHandler): Unsubscribe {
+    return this.emitter.on(Events.OccupantAdded, handler);
+  }
+
+  public getSpot(occupantId: TerrainOccupant["id"]): Spot {
     return this.spotArray.getByOccupantId(occupantId);
   }
 
-  public takeSpot(occupantId: string, destSpot: Spot) {
+  public takeSpot(occupantId: TerrainOccupant["id"], destSpot: Spot) {
     try {
       const currentSpot = this.spotArray.getByOccupantId(occupantId);
       this.spotArray.save(currentSpot.setOccupant(null));
@@ -49,7 +65,7 @@ export class Terrain {
     }
   }
 
-  public takeSpotRandomly(occupantId: string) {
+  public takeSpotRandomly(occupantId: TerrainOccupant["id"]) {
     const freeSpots = this.spotArray.filter((spot) => !spot.isOccupied);
     if (freeSpots.length === 0) {
       throw new TerrainFullError();
@@ -58,7 +74,7 @@ export class Terrain {
     this.spotArray.save(spot.setOccupant(occupantId));
   }
 
-  public consumeResources(occupantId: string, amount: number): number {
+  public consumeResources(occupantId: TerrainOccupant["id"], amount: number): number {
     const spot = this.spotArray.getByOccupantId(occupantId);
     const consumption = Math.min(spot.resourceCount, amount);
     const updated = spot.subResources(consumption);
@@ -66,7 +82,12 @@ export class Terrain {
     return consumption;
   }
 
-  public getFreeSpotsAround(occupantId: string): Spot[] {
+  public getFreeSpotsAround(occupantId: TerrainOccupant["id"]): Spot[] {
     return this.spotArray.getSurroundingOfOccupant(occupantId).filter((spot) => !spot.isOccupied);
+  }
+
+  public putOccupant(occupant: TerrainOccupant, spot: Spot) {
+    this.takeSpot(occupant.id, spot);
+    this.emitter.emit(Events.OccupantAdded, occupant);
   }
 }

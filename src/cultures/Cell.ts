@@ -1,6 +1,7 @@
 import { randomArrayElement } from "../util/array/elements";
 import { TerrainFacade } from "../terrain/TerrainFacade";
 import { EnergyStore, NotEnoughEnergyError } from "../energy/EnergyStore";
+import { randomStr } from "../util/random";
 
 const INITIAL_SIZE = 1;
 const INITIAL_ENERGY = 5;
@@ -16,7 +17,7 @@ export type DivisionCallback = (newCell: Cell) => void;
 export class Cell {
   private readonly energyStore: EnergyStore;
   private size: number;
-  private divisionCallback: DivisionCallback = () => {};
+  private children: Cell[] = [];
 
   constructor(
     public readonly id: string,
@@ -45,14 +46,6 @@ export class Cell {
     this.produceEnergy();
     this.grow();
     this.divide();
-  }
-
-  public copy() {
-    return new Cell(this.id, this.terrain, this.energy, this.cellSize);
-  }
-
-  public onDivision(callback: DivisionCallback) {
-    this.divisionCallback = callback;
   }
 
   private executeInnerProcesses() {
@@ -106,11 +99,10 @@ export class Cell {
       return;
     }
 
-    const cloneId = `_${this.id}`;
-    const clone = new Cell(cloneId, this.terrain.clone(cloneId), INITIAL_ENERGY);
+    const clone = this.clone();
     this.energyStore.utilize(DIVISION_PROCESS_ENERGY_RATE);
     this.terrain.put(clone, randomArrayElement(freeSpots));
-    this.divisionCallback(clone);
+    this.children.push(clone);
   }
 
   private move() {
@@ -128,5 +120,15 @@ export class Cell {
         // consider changing the reproduction strategy
       }
     }
+  }
+
+  private clone(): Cell {
+    const [rootAncestorId] = this.id.split("_");
+    let id: string;
+    do {
+      id = `${rootAncestorId}_${randomStr(4)}`;
+    } while (this.children.find((cell) => cell.id === id) !== undefined);
+    const cell = new Cell(id, this.terrain.clone(id));
+    return cell;
   }
 }

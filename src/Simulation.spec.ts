@@ -152,7 +152,8 @@ describe("E2E simulation test", () => {
     });
 
     it("should divide", () => {
-      expect(terrain.cellMatrix.flat()).toContain("_c0");
+      const notEmptySpots = terrain.spots.flat().filter((spot) => spot.isOccupied);
+      expect(notEmptySpots.length).toBe(2);
     });
   });
 
@@ -168,7 +169,8 @@ describe("E2E simulation test", () => {
     });
 
     it("should divide", () => {
-      expect(terrain.cellMatrix.flat()).not.toContain("_c0");
+      const notEmptySpots = terrain.spots.flat().filter((spot) => spot.isOccupied);
+      expect(notEmptySpots.length).toEqual(1);
     });
   });
 });

@@ -56,13 +56,9 @@ export class Terrain {
   }
 
   public takeSpot(occupantId: TerrainOccupant["id"], destSpot: Spot) {
-    try {
-      const currentSpot = this.spotArray.getByOccupantId(occupantId);
-      this.spotArray.save(currentSpot.setOccupant(null));
-    } catch {
-    } finally {
-      this.spotArray.save(destSpot.setOccupant(occupantId));
-    }
+    const currentSpot = this.spotArray.getByOccupantId(occupantId);
+    this.spotArray.save(currentSpot.setOccupant(null));
+    this.spotArray.save(destSpot.setOccupant(occupantId));
   }
 
   public takeSpotRandomly(occupantId: TerrainOccupant["id"]) {
@@ -87,7 +83,7 @@ export class Terrain {
   }
 
   public putOccupant(occupant: TerrainOccupant, spot: Spot) {
-    this.takeSpot(occupant.id, spot);
+    this.spotArray.save(spot.setOccupant(occupant.id));
     this.emitter.emit(Events.OccupantAdded, occupant);
   }
 }

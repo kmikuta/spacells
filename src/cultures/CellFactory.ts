@@ -1,15 +1,9 @@
 import { Terrain } from "../main";
 import { TerrainFacade } from "../terrain/TerrainFacade";
-import { Cell } from "./Cell";
-
-export interface CellConfig {
-  id: string;
-  initialEnergy?: number;
-  initialSize?: number;
-}
+import { Cell, CellParameters } from "./Cell";
 
 export class CellFactory {
-  public static createCell(terrain: Terrain, { id, initialEnergy, initialSize }: CellConfig): Cell {
-    return new Cell(id, new TerrainFacade(terrain, id), initialEnergy, initialSize);
+  public static createCell(id: string, terrain: Terrain, parameters?: CellParameters): Cell {
+    return new Cell(id, new TerrainFacade(terrain, id), parameters);
   }
 }

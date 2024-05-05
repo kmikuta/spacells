@@ -38,8 +38,10 @@ The project is in the early development stage and is not ready for production us
 ```javascript
 import { CellFactory, Simulation, TerrainFactory, generateIds } from "@spacells/core";
 
+const generateIds = (count) => new Array(count).fill(0).map((_, index) => `c${index}`);
+
 const terrain = TerrainFactory.createTerrain({ width: 10, height: 10, resourcesPerSpot: 10 });
-const cells = generateIds(100).map((id) => CellFactory.createCell(terrain, { id }));
+const cells = generateIds(100).map((id) => CellFactory.createCell(id, terrain));
 const simulation = new Simulation(terrain, cells);
 
 for (let i = 0; i < 10; i++) {

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Cell behavior configuration parameters
+
+### Removed
+
+- generateIds function
+
 ## [0.0.3] - 2024-05-02
 
 ### Fixed
